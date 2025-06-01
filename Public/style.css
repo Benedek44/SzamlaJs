@@ -1,0 +1,265 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+nav {
+  background: #2c3e50;
+  display: flex;
+}
+
+nav .tab {
+  flex: 1;
+  padding: 1rem;
+  background: #34495e;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  text-align: center;
+}
+
+nav .tab.active {
+  background: #1abc9c;
+}
+
+nav .tab:hover {
+  background: #16a085;
+}
+
+main {
+  flex: 1;
+  padding: 1rem;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+#usersContainer,
+#invoicesContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.user-card,
+.invoice-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-card h3,
+.invoice-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.user-card p,
+.invoice-card p {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.invoice-card .actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.invoice-card button {
+  flex: 1;
+  padding: 0.4rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.invoice-card .edit-btn {
+  background: #f39c12;
+}
+
+.invoice-card .delete-btn {
+  background: #e74c3c;
+}
+
+.invoice-card .edit-btn:hover {
+  background: #d68910;
+}
+
+.invoice-card .delete-btn:hover {
+  background: #c0392b;
+}
+
+#newInvoiceBtn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+#newInvoiceBtn:hover {
+  background: #1e8449;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.popup-content h3 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.popup-content label {
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.popup-content input,
+.popup-content select {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.form-buttons button {
+  padding: 0.5rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+#cancelInvoiceBtn {
+  background: #7f8c8d;
+}
+
+#cancelInvoiceBtn:hover {
+  background: #606b6b;
+}
+
+#saveInvoiceBtn {
+  background: #27ae60;
+}
+
+#saveInvoiceBtn:hover {
+  background: #1e8449;
+}
+
+#newUserBtn {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+#newUserBtn:hover {
+  background: #1e8449;
+}
+
+.user-card .actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user-card button {
+  flex: 1;
+  padding: 0.4rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.user-card .edit-btn {
+  background: #f39c12;
+}
+
+.user-card .edit-btn:hover {
+  background: #d68910;
+}
+
+.user-card .delete-btn {
+  background: #e74c3c;
+}
+
+.user-card .delete-btn:hover {
+  background: #c0392b;
+}
+
+#cancelUserBtn {
+  background: #7f8c8d;
+}
+
+#cancelUserBtn:hover {
+  background: #606b6b;
+}
+
+#saveUserBtn {
+  background: #2980b9;
+}
+
+#saveUserBtn:hover {
+  background: #2471a3;
+}

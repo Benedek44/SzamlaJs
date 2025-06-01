@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Felhasználók és Számlák Kezelő</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav>
+      <button id="usersTab" class="tab active">Felhasználók</button>
+      <button id="invoicesTab" class="tab">Számlák</button>
+    </nav>
+
+    <main>
+      <!-- Felhasználók szekció -->
+      <section id="usersSection">
+        <h2>Felhasználók</h2>
+        <button id="newUserBtn">Új Felhasználó</button>
+        <div id="usersContainer"></div>
+      </section>
+
+      <!-- Számlák szekció -->
+      <section id="invoicesSection" class="hidden">
+        <h2>Számlák</h2>
+        <button id="newInvoiceBtn">Új Számla</button>
+        <div id="invoicesContainer"></div>
+      </section>
+    </main>
+
+    <!-- Számla popup -->
+    <div id="invoicePopup" class="overlay hidden">
+      <div class="popup-content">
+        <h3 id="invoiceFormTitle">Új számla</h3>
+        <form id="invoiceForm">
+          <input type="hidden" id="invoiceId" value="" />
+
+          <label for="issuer">Kiállító:</label>
+          <select id="issuer" required>
+            <option value="">Válassz kiállítót</option>
+          </select>
+
+          <label for="customer">Vevő:</label>
+          <select id="customer" required>
+            <option value="">Válassz vevőt</option>
+          </select>
+
+          <label for="accountnumber">Számlaszám:</label>
+          <input type="text" id="accountnumber" required />
+
+          <label for="created">Létrehozás:</label>
+          <input type="date" id="created" required />
+
+          <label for="completed">Teljesítés:</label>
+          <input type="date" id="completed" required />
+
+          <label for="deadline">Fizetési határidő:</label>
+          <input type="date" id="deadline" required />
+
+          <label for="total">Végösszeg (Ft):</label>
+          <input type="number" id="total" step="0.01" required />
+
+          <label for="vatrate">ÁFA (%):</label>
+          <input type="number" id="vatrate" step="0.01" required />
+
+          <div class="form-buttons">
+            <button type="button" id="cancelInvoiceBtn">Mégse</button>
+            <button type="submit" id="saveInvoiceBtn">Mentés</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Felhasználó popup -->
+    <div id="userPopup" class="overlay hidden">
+      <div class="popup-content">
+        <h3 id="userFormTitle">Új felhasználó</h3>
+        <form id="userForm">
+          <input type="hidden" id="userId" value="" />
+
+          <label for="userName">Név:</label>
+          <input type="text" id="userName" required />
+
+          <label for="userAddress">Cím:</label>
+          <input type="text" id="userAddress" required />
+
+          <label for="userTaxNumber">Adószám:</label>
+          <input type="text" id="userTaxNumber" required />
+
+          <label for="userIsCustomer">Típus:</label>
+          <select id="userIsCustomer" required>
+            <option value="1">Vevő</option>
+            <option value="0">Kiállító</option>
+          </select>
+
+          <div class="form-buttons">
+            <button type="button" id="cancelUserBtn">Mégse</button>
+            <button type="submit" id="saveUserBtn">Mentés</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
