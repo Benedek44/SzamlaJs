@@ -68,11 +68,21 @@ app.put("/users/:id", (req, res) => {
 
 app.delete("/users/:id", (req, res) => {
   try {
-    const result = db.deleteUser(req.params.id);
+    const userId = Number(req.params.id);
+
+    const allInvoices = db.getSzamlak(); 
+    allInvoices
+      .filter(inv => inv.issuer_id === userId)
+      .forEach(inv => {
+        db.stornoSzamla(inv.id);
+      });
+
+    const result = db.deleteUser(userId);
     if (result.changes !== 1) {
-      return res.status(501).json({ message: "User delete failed!" });
+      return res.status(500).json({ message: "User delete failed!" });
     }
-    res.status(200).json({ message: "User deleted!" });
+
+    res.status(200).json({ message: "User deleted, related invoices stornozott!" });
   } catch (error) {
     res.status(500).json({ message: `${error}` });
   }
@@ -81,7 +91,7 @@ app.delete("/users/:id", (req, res) => {
 
 app.get("/szamlak", (req, res) => {
   try {
-    const invoices = db.getSzamla();
+    const invoices = db.getSzamlak();
     res.status(200).json(invoices);
   } catch (error) {
     res.status(500).json({ message: `${error}` });
@@ -98,10 +108,10 @@ app.get("/szamlak/:id", (req, res) => {
   }
 });
 
+
 app.post("/szamlak", (req, res) => {
   try {
-    const {issuerId, customerId, accountnumber, created, completed, deadline, total, vatrate} = req.body;
-
+    const { issuerId, customerId, accountnumber, created, completed, deadline, total, vatrate } = req.body;
     if (
       issuerId === undefined ||
       customerId === undefined ||
@@ -113,6 +123,17 @@ app.post("/szamlak", (req, res) => {
       vatrate === undefined
     ) {
       return res.status(400).json({ message: "Invalid invoice data!" });
+    }
+
+    const createdDate = new Date(created);   
+    const deadlineDate = new Date(deadline); 
+
+    const maxAllowed = new Date(createdDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    if (deadlineDate.getTime() > maxAllowed.getTime()) {
+      return res.status(400).json({
+        message: "A fizetési határidő nem lehet több, mint a kiállítás dátuma + 30 nap!"
+      });
     }
 
     const result = db.saveSzamla(issuerId, customerId, accountnumber, created, completed, deadline, total, vatrate);
@@ -130,6 +151,7 @@ app.post("/szamlak", (req, res) => {
       deadline,
       total,
       vatrate,
+      isActive: 1,
     });
   } catch (error) {
     res.status(500).json({ message: `${error}` });
@@ -138,54 +160,17 @@ app.post("/szamlak", (req, res) => {
 
 app.put("/szamlak/:id", (req, res) => {
   try {
-    const {issuerId, customerId, accountnumber, created, completed, deadline, total, vatrate} = req.body;
-
-    if (
-      issuerId === undefined ||
-      customerId === undefined ||
-      !accountnumber ||
-      !created ||
-      !completed ||
-      !deadline ||
-      total === undefined ||
-      vatrate === undefined
-    ) {
-      return res.status(400).json({ message: "Invalid invoice data!" });
-    }
-
     const existing = db.getSzamlaById(req.params.id);
     if (!existing) {
       return res.status(404).json({ message: "Invoice not found!" });
     }
 
-    const result = db.updateSzamla(req.params.id, issuerId, customerId, accountnumber, created, completed, deadline, total, vatrate);
+    const result = db.stornoSzamla(req.params.id);
     if (result.changes !== 1) {
-      return res.status(501).json({ message: "Invoice update failed!" });
+      return res.status(501).json({ message: "Invoice storno failed!" });
     }
 
-    res.status(200).json({
-      id: Number(req.params.id),
-      issuerId,
-      customerId,
-      accountnumber,
-      created,
-      completed,
-      deadline,
-      total,
-      vatrate,
-    });
-  } catch (error) {
-    res.status(500).json({ message: `${error}` });
-  }
-});
-
-app.delete("/szamlak/:id", (req, res) => {
-  try {
-    const result = db.deleteSzamla(req.params.id);
-    if (result.changes !== 1) {
-      return res.status(501).json({ message: "Invoice delete failed!" });
-    }
-    res.status(200).json({ message: "Invoice deleted!" });
+    res.status(200).json({ message: "Számla stornózva!" });
   } catch (error) {
     res.status(500).json({ message: `${error}` });
   }

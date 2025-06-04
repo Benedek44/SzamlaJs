@@ -100,60 +100,157 @@ function renderInvoices(invoices) {
   invoices.forEach(inv => {
     const card = document.createElement('div');
     card.className = 'invoice-card';
+    card.style.position = 'relative';
+
+    const issuerExists = !!usersMap[inv.issuer_id];
+    const customerExists = !!usersMap[inv.customer_id];
+    const isStornoBecauseOfInactive = inv.isActive === 0;
+    const isStorno = isStornoBecauseOfInactive || !issuerExists || !customerExists;
+
+    if (isStorno) {
+      card.style.opacity = '0.6';
+    }
 
     const title = document.createElement('h3');
-    title.textContent = `Számla: ${inv.accountnumber}`;
+    title.textContent = `Számla száma: ${inv.accountnumber}`;
+    title.style.textAlign = 'center';
+    title.style.marginBottom = '0.75rem';
     card.appendChild(title);
 
-    const pIssuer = document.createElement('p');
-    const issuerName = usersMap[inv.issuer_id]?.name || `Ismeretlen (#${inv.issuer_id})`;
-    pIssuer.innerHTML = `<strong>Kiállító:</strong> ${issuerName}`;
-    card.appendChild(pIssuer);
+    const partiesContainer = document.createElement('div');
+    partiesContainer.style.display = 'flex';
+    partiesContainer.style.justifyContent = 'space-between';
+    partiesContainer.style.marginBottom = '0.75rem';
 
-    const pCustomer = document.createElement('p');
+    const issuerDiv = document.createElement('div');
+    issuerDiv.style.flex = '1';
+    issuerDiv.style.paddingRight = '0.5rem';
+
+    const issuerName = usersMap[inv.issuer_id]?.name || `Törölt felhasználó`;
+    const issuerAddress = usersMap[inv.issuer_id]?.address || '';
+    const issuerTax = usersMap[inv.issuer_id]?.taxnumber || '';
+
+    const issuerTitle = document.createElement('p');
+    issuerTitle.innerHTML = `<strong>Eladó:</strong>`;
+    issuerTitle.style.marginBottom = '0.3rem';
+    issuerDiv.appendChild(issuerTitle);
+
+    const issuerNameP = document.createElement('p');
+    issuerNameP.textContent = issuerName;
+    issuerNameP.style.marginBottom = '0.2rem';
+    issuerDiv.appendChild(issuerNameP);
+
+    const issuerAddressP = document.createElement('p');
+    issuerAddressP.textContent = issuerAddress;
+    issuerAddressP.style.marginBottom = '0.2rem';
+    issuerDiv.appendChild(issuerAddressP);
+
+    const issuerTaxP = document.createElement('p');
+    issuerTaxP.textContent = `Adószám: ${issuerTax}`;
+    issuerDiv.appendChild(issuerTaxP);
+
+    partiesContainer.appendChild(issuerDiv);
+
+    const customerDiv = document.createElement('div');
+    customerDiv.style.flex = '1';
+    customerDiv.style.textAlign = 'right';
+    customerDiv.style.paddingLeft = '0.5rem';
+
     const customerName = usersMap[inv.customer_id]?.name || `Ismeretlen (#${inv.customer_id})`;
-    pCustomer.innerHTML = `<strong>Vevő:</strong> ${customerName}`;
-    card.appendChild(pCustomer);
+    const customerAddress = usersMap[inv.customer_id]?.address || '';
+    const customerTax = usersMap[inv.customer_id]?.taxnumber || '';
 
-    const pCreated = document.createElement('p');
-    pCreated.innerHTML = `<strong>Létrehozva:</strong> ${formatDate(inv.created)}`;
-    card.appendChild(pCreated);
+    const customerTitle = document.createElement('p');
+    customerTitle.innerHTML = `<strong>Vevő:</strong>`;
+    customerTitle.style.marginBottom = '0.3rem';
+    customerDiv.appendChild(customerTitle);
 
-    const pCompleted = document.createElement('p');
-    pCompleted.innerHTML = `<strong>Teljesítés:</strong> ${formatDate(inv.completed)}`;
-    card.appendChild(pCompleted);
+    const customerNameP = document.createElement('p');
+    customerNameP.textContent = customerName;
+    customerNameP.style.marginBottom = '0.2rem';
+    customerDiv.appendChild(customerNameP);
 
-    const pDeadline = document.createElement('p');
-    pDeadline.innerHTML = `<strong>Határidő:</strong> ${formatDate(inv.deadline)}`;
-    card.appendChild(pDeadline);
+    const customerAddressP = document.createElement('p');
+    customerAddressP.textContent = customerAddress;
+    customerAddressP.style.marginBottom = '0.2rem';
+    customerDiv.appendChild(customerAddressP);
 
-    const pTotal = document.createElement('p');
-    pTotal.innerHTML = `<strong>Végösszeg:</strong> ${inv.total.toFixed(2)} Ft`;
-    card.appendChild(pTotal);
+    const customerTaxP = document.createElement('p');
+    customerTaxP.textContent = `Adószám: ${customerTax}`;
+    customerDiv.appendChild(customerTaxP);
 
-    const pVat = document.createElement('p');
-    pVat.innerHTML = `<strong>ÁFA:</strong> ${inv.vatrate}%`;
-    card.appendChild(pVat);
+    partiesContainer.appendChild(customerDiv);
+    card.appendChild(partiesContainer);
+
+    const datesDiv = document.createElement('div');
+    datesDiv.style.display = 'flex';
+    datesDiv.style.justifyContent = 'space-between';
+    datesDiv.style.marginBottom = '0.75rem';
+
+    const createdP = document.createElement('p');
+    createdP.innerHTML = `<strong>Létrehozva:</strong> ${formatDate(inv.created)}`;
+    datesDiv.appendChild(createdP);
+
+    const completedP = document.createElement('p');
+    completedP.innerHTML = `<strong>Teljesítés:</strong> ${formatDate(inv.completed)}`;
+    datesDiv.appendChild(completedP);
+
+    const deadlineP = document.createElement('p');
+    deadlineP.innerHTML = `<strong>Határidő:</strong> ${formatDate(inv.deadline)}`;
+    datesDiv.appendChild(deadlineP);
+
+    card.appendChild(datesDiv);
+
+    const summaryDiv = document.createElement('div');
+    summaryDiv.style.textAlign = 'right';
+
+    const gross = Number(inv.total);
+    const vatRate = Number(inv.vatrate);
+    const net = +(gross / (1 + vatRate / 100)).toFixed(2);
+    const vatAmount = +(gross - net).toFixed(2);
+
+    const netP = document.createElement('p');
+    netP.innerHTML = `<strong>Nettó:</strong> ${net.toFixed(2)} Ft`;
+    summaryDiv.appendChild(netP);
+
+    const vatP = document.createElement('p');
+    vatP.innerHTML = `<strong>ÁFA (${vatRate}%):</strong> ${vatAmount.toFixed(2)} Ft`;
+    summaryDiv.appendChild(vatP);
+
+    const grossP = document.createElement('p');
+    grossP.innerHTML = `<strong>Bruttó:</strong> ${gross.toFixed(2)} Ft`;
+    summaryDiv.appendChild(grossP);
+
+    card.appendChild(summaryDiv);
 
     const actions = document.createElement('div');
     actions.className = 'actions';
+    actions.style.marginTop = '0.75rem';
 
-    const editBtn = document.createElement('button');
-    editBtn.className = 'edit-btn';
-    editBtn.textContent = 'Szerkeszt';
-    editBtn.onclick = () => openInvoiceEditor(inv.id);
-    actions.appendChild(editBtn);
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.textContent = 'Törlés';
-    deleteBtn.onclick = () => deleteInvoice(inv.id);
-    actions.appendChild(deleteBtn);
+    if (!isStornoBecauseOfInactive && issuerExists && customerExists) {
+      const stornoBtn = document.createElement('button');
+      stornoBtn.className = 'delete-btn';
+      stornoBtn.textContent = 'Stornó';
+      stornoBtn.onclick = () => stornoInvoice(inv.id);
+      actions.appendChild(stornoBtn);
+    }
 
     card.appendChild(actions);
+
+    if (isStorno) {
+      const stornoLabel = document.createElement('div');
+      stornoLabel.textContent = 'Stornózott';
+      stornoLabel.style.position = 'absolute';
+      stornoLabel.style.bottom = '10px';
+      stornoLabel.style.left = '180px';
+      stornoLabel.style.color = 'red';
+      stornoLabel.style.fontWeight = 'bold';
+      card.appendChild(stornoLabel);
+    }
     container.appendChild(card);
   });
 }
+
 
 async function loadAllData() {
   await loadUsersMap();
@@ -269,6 +366,16 @@ invoiceForm.addEventListener('submit', async (e) => {
     vatrate: parseFloat(vatrateInput.value)
   };
 
+  if (data.created && data.deadline) {
+    const createdDate = new Date(data.created);
+    const deadlineDate = new Date(data.deadline);
+    const maxAllowed = new Date(createdDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    if (deadlineDate.getTime() > maxAllowed.getTime()) {
+      alert('A fizetési határidő nem lehet több, mint a kiállítás dátuma + 30 nap!');
+      return;
+    }
+  }
   if (
     !data.issuerId ||
     !data.customerId ||
@@ -310,20 +417,21 @@ invoiceForm.addEventListener('submit', async (e) => {
   }
 });
 
-async function deleteInvoice(id) {
-  if (!confirm('Biztosan törlöd ezt a számlát?')) return;
+
+async function stornoInvoice(id) {
+  if (!confirm('Biztosan stornózod ezt a számlát?')) return;
   try {
-    const res = await fetch(`${BASE_URL}/szamlak/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${BASE_URL}/szamlak/${id}`, { method: 'PUT' });
     if (res.ok) {
       const newInvoices = await fetchInvoices();
       renderInvoices(newInvoices);
     } else {
       const err = await res.json();
-      alert('Törlés sikertelen: ' + (err.message || res.status));
+      alert('Stornózás sikertelen: ' + (err.message || res.status));
     }
   } catch (e) {
-    console.error("Hiba a törlés közben:", e);
-    alert('Hálózati hiba történt törléskor.');
+    console.error("Hiba a stornózás közben:", e);
+    alert('Hálózati hiba történt stornózáskor.');
   }
 }
 

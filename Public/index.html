@@ -13,14 +13,12 @@
     </nav>
 
     <main>
-      <!-- Felhasználók szekció -->
       <section id="usersSection">
         <h2>Felhasználók</h2>
         <button id="newUserBtn">Új Felhasználó</button>
         <div id="usersContainer"></div>
       </section>
 
-      <!-- Számlák szekció -->
       <section id="invoicesSection" class="hidden">
         <h2>Számlák</h2>
         <button id="newInvoiceBtn">Új Számla</button>
@@ -28,7 +26,6 @@
       </section>
     </main>
 
-    <!-- Számla popup -->
     <div id="invoicePopup" class="overlay hidden">
       <div class="popup-content">
         <h3 id="invoiceFormTitle">Új számla</h3>
@@ -57,7 +54,7 @@
           <label for="deadline">Fizetési határidő:</label>
           <input type="date" id="deadline" required />
 
-          <label for="total">Végösszeg (Ft):</label>
+          <label for="total">Végösszeg (Bruttó) (Ft):</label>
           <input type="number" id="total" step="0.01" required />
 
           <label for="vatrate">ÁFA (%):</label>
@@ -71,7 +68,6 @@
       </div>
     </div>
 
-    <!-- Felhasználó popup -->
     <div id="userPopup" class="overlay hidden">
       <div class="popup-content">
         <h3 id="userFormTitle">Új felhasználó</h3>
