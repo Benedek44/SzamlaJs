@@ -196,7 +196,7 @@ function renderInvoices(invoices) {
     datesDiv.appendChild(completedP);
 
     const deadlineP = document.createElement('p');
-    deadlineP.innerHTML = `<strong>Határidő:</strong> ${formatDate(inv.deadline)}`;
+    deadlineP.innerHTML = `<strong>Fizetési határidő:</strong> ${formatDate(inv.deadline)}`;
     datesDiv.appendChild(deadlineP);
 
     card.appendChild(datesDiv);

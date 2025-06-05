@@ -68,15 +68,15 @@ if (rowCountUsers === 0) {
 }
 
 const szamla = [
-  { issuerId: 4, customerId: 1, accountnumber: "0987654321", created: "2025-05-29", completed: "2025-05-30", deadline: "2023-06-10", total: 1000, vatrate: 27 },
-  { issuerId: 4, customerId: 1, accountnumber: "0987654321", created: "2025-05-30", completed: "2025-05-30", deadline: "2023-06-05", total: 2500, vatrate: 27 },
-  { issuerId: 4, customerId: 1, accountnumber: "0987654321", created: "2025-06-04", completed: "2025-06-05", deadline: "2023-06-15", total: 28000, vatrate: 19 },
-  { issuerId: 5, customerId: 2, accountnumber: "1245789642", created: "2025-06-04", completed: "2025-06-05", deadline: "2023-06-15", total: 21000, vatrate: 27 },
-  { issuerId: 5, customerId: 2, accountnumber: "1245789642", created: "2025-06-10", completed: "2025-06-10", deadline: "2023-06-20", total: 172000, vatrate: 20 },
-  { issuerId: 5, customerId: 2, accountnumber: "1245789642", created: "2025-06-12", completed: "2025-06-13", deadline: "2023-06-15", total: 24500, vatrate: 27 },
-  { issuerId: 6, customerId: 3, accountnumber: "8458964137", created: "2025-06-18", completed: "2025-06-18", deadline: "2023-06-19", total: 39500, vatrate: 27 },
-  { issuerId: 6, customerId: 3, accountnumber: "8458964137", created: "2025-06-20", completed: "2025-06-20", deadline: "2023-06-25", total: 47900, vatrate: 27 },
-  { issuerId: 6, customerId: 3, accountnumber: "8458964137", created: "2025-06-25", completed: "2025-06-21", deadline: "2023-06-30", total: 99500, vatrate: 27 },
+  { issuerId: 4, customerId: 1, accountnumber: "2024/0650", created: "2025-05-29", completed: "2025-05-30", deadline: "2023-06-10", total: 1000, vatrate: 27 },
+  { issuerId: 4, customerId: 1, accountnumber: "2022/7845", created: "2025-05-30", completed: "2025-05-30", deadline: "2023-06-05", total: 2500, vatrate: 27 },
+  { issuerId: 4, customerId: 1, accountnumber: "2018/7874", created: "2025-06-04", completed: "2025-06-05", deadline: "2023-06-15", total: 28000, vatrate: 19 },
+  { issuerId: 5, customerId: 2, accountnumber: "2019/2566", created: "2025-06-04", completed: "2025-06-05", deadline: "2023-06-15", total: 21000, vatrate: 27 },
+  { issuerId: 5, customerId: 2, accountnumber: "2020/25787", created: "2025-06-10", completed: "2025-06-10", deadline: "2023-06-20", total: 172000, vatrate: 20 },
+  { issuerId: 5, customerId: 2, accountnumber: "2017/00172", created: "2025-06-12", completed: "2025-06-13", deadline: "2023-06-15", total: 24500, vatrate: 27 },
+  { issuerId: 6, customerId: 3, accountnumber: "2021/00002", created: "2025-06-18", completed: "2025-06-18", deadline: "2023-06-19", total: 39500, vatrate: 27 },
+  { issuerId: 6, customerId: 3, accountnumber: "2022/01245", created: "2025-06-20", completed: "2025-06-20", deadline: "2023-06-25", total: 47900, vatrate: 27 },
+  { issuerId: 6, customerId: 3, accountnumber: "2015/14756", created: "2025-06-25", completed: "2025-06-21", deadline: "2023-06-30", total: 99500, vatrate: 27 },
 ];
 
 const rowCountSzamla = db.prepare(`SELECT COUNT(*) AS count FROM szamla`).get().count;
